@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 대시보드</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+    <style>
+        :root { /* 색상 변수 */ }
+        body { font-family: 'Noto Sans KR', sans-serif; margin: 0; background-color: #f8f9fa; display: flex; }
+        .sidebar {
+            width: 240px; background-color: #212529; color: white;
+            position: fixed; top: 0; left: 0; bottom: 0;
+            display: flex; flex-direction: column; padding: 1.5rem 0;
+        }
+        .sidebar-header { text-align: center; padding: 0 1.5rem 1.5rem; font-size: 1.5rem; font-weight: 700; border-bottom: 1px solid #495057; }
+        .sidebar-nav { flex-grow: 1; list-style: none; padding: 1.5rem 0; margin: 0; }
+        .sidebar-nav a {
+            display: block; color: #ced4da; text-decoration: none; padding: 0.8rem 1.5rem;
+            transition: all 0.2s;
+        }
+        .sidebar-nav a:hover, .sidebar-nav a.active { background-color: #495057; color: white; }
+
+        .main-content { margin-left: 240px; width: calc(100% - 240px); padding: 2rem; }
+        .page-header { margin-bottom: 2rem; }
+        .page-header h1 { font-size: 2rem; margin: 0; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: white; padding: 1.5rem; border-radius: 0.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .stat-label { font-size: 1rem; color: #6c757d; margin-bottom: 0.5rem; }
+        .stat-number { font-size: 2.5rem; font-weight: 700; color: #212529; }
+
+        .content-card { background: white; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #dee2e6; }
+        th { background-color: #f8f9fa; }
+        tr:hover { background-color: #f1f3f5; }
+        .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.875rem; }
+
+        /* 모달 스타일 */
+        .modal { /* 이전과 유사, 디자인 통일 */ }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">Admin Panel</div>
+        <ul class="sidebar-nav">
+            <li><a href="#" class="active" onclick="loadContent('dashboard')">대시보드</a></li>
+            <li><a href="#" onclick="loadContent('orders')">주문 관리</a></li>
+            <li><a href="#" onclick="loadContent('customers')">고객 관리</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <!-- 콘텐츠가 동적으로 로드될 영역 -->
+        <div id="content-area"></div>
+    </main>
+    
+    <!-- 주문 상태 업데이트 모달 (이전과 동일한 구조) -->
+    
+    <script>
+        // --- 설정 ---
+        const GOOGLE_APPS_SCRIPT_URL = '197p_JJqYQMEgB18ZkQtJI4_vlA7KUSiq9cBywdkltIY'; // ⚠️ 1단계에서 복사한 URL 붙여넣기
+
+        // --- JavaScript 로직 ---
+        document.addEventListener('DOMContentLoaded', () => loadContent('dashboard'));
+
+        function loadContent(page) {
+            // 네비게이션 활성 상태 업데이트
+            document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+            document.querySelector(`.sidebar-nav a[onclick="loadContent('${page}')"]`).classList.add('active');
+            
+            const contentArea = document.getElementById('content-area');
+            if (page === 'dashboard') {
+                renderDashboard();
+            } else if (page === 'orders') {
+                renderOrdersPage();
+            } else if (page === 'customers') {
+                renderCustomersPage();
+            }
+        }
+        
+        async function renderDashboard() {
+            // 대시보드 통계 카드 및 최근 주문 목록 렌더링
+        }
+        
+        async function renderOrdersPage() {
+            // 주문 관리 페이지(필터 + 테이블) 렌더링
+        }
+        
+        async function renderCustomersPage() {
+            // 고객 관리 페이지(검색 + 테이블) 렌더링
+        }
+        
+        // ... 기타 API 호출 및 모달 제어 함수들 ...
+    </script>
+</body>
+</html>
