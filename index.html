@@ -1,3 +1,4 @@
+<!-- [index.html - 최종 통합본] -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -7,306 +8,53 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #0f172a;
-            --accent: #06b6d4;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --bg: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-card: #334155;
-            --text: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --border: #475569;
-            --shadow: rgba(0, 0, 0, 0.3);
+            --primary: #6366f1; --primary-dark: #4f46e5; --secondary: #0f172a; --accent: #06b6d4;
+            --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --bg: #0f172a;
+            --bg-secondary: #1e293b; --bg-card: #334155; --text: #f8fafc; --text-secondary: #cbd5e1;
+            --border: #475569; --shadow: rgba(0, 0, 0, 0.3);
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, var(--bg) 0%, #1e293b 100%);
-            color: var(--text);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        /* Header */
-        .header {
-            backdrop-filter: blur(10px);
-            background: rgba(15, 23, 42, 0.8);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 0.7rem 1.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-outline:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-2px);
-        }
-
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, var(--bg) 0%, #1e293b 100%); color: var(--text); line-height: 1.6; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+        .header { backdrop-filter: blur(10px); background: rgba(15, 23, 42, 0.8); border-bottom: 1px solid var(--border); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; transition: transform 0.3s ease; }
+        .logo:hover { transform: scale(1.05); }
+        .nav-buttons { display: flex; gap: 0.5rem; }
+        .btn { padding: 0.7rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; position: relative; overflow: hidden; }
+        .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transition: left 0.5s; }
+        .btn:hover::before { left: 100%; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4); }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-outline:hover { background: var(--primary); color: white; transform: translateY(-2px); }
         .w-100 { width: 100%; }
-
-        /* Main Content */
-        main {
-            min-height: calc(100vh - 80px);
-            display: flex;
-            align-items: center;
-            padding: 2rem 0;
-        }
-
-        .page-section {
-            display: none;
-            width: 100%;
-        }
-
-        .page-section.active {
-            display: block;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--text), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1.2;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero .btn {
-            font-size: 1.1rem;
-            padding: 1rem 2rem;
-        }
-
-        /* Auth Container */
-        .auth-container {
-            max-width: 450px;
-            margin: 2rem auto;
-            background: rgba(51, 65, 85, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            padding: 2rem;
-            box-shadow: 0 20px 60px var(--shadow);
-        }
-
-        .auth-container h2 {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-            color: var(--text);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--text);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid var(--border);
-            border-radius: 0.5rem;
-            background: rgba(15, 23, 42, 0.5);
-            color: var(--text);
-            transition: all 0.3s ease;
-            font-size: 1rem;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .form-control::placeholder {
-            color: var(--text-secondary);
-        }
-
-        /* Alerts */
-        .alert {
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 0.5rem;
-            border: 1px solid transparent;
-        }
-
-        .alert-success {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success);
-            border-color: var(--success);
-        }
-
-        .alert-danger {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
-            border-color: var(--danger);
-        }
-
-        /* Business Fields */
-        .business-fields {
-            background: rgba(15, 23, 42, 0.3);
-            border: 1px solid var(--border);
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin-top: 1rem;
-        }
-
-        .business-fields h3 {
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            color: var(--accent);
-        }
-
-        /* Loading */
-        .loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            backdrop-filter: blur(5px);
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(99, 102, 241, 0.3);
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
+        main { min-height: calc(100vh - 80px); display: flex; align-items: center; padding: 2rem 0; }
+        .page-section.active { display: block; animation: slideIn 0.5s ease-out; width: 100%; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .hero { text-align: center; padding: 4rem 0; }
+        .hero h1 { font-size: 3.5rem; font-weight: 700; margin-bottom: 1rem; background: linear-gradient(135deg, var(--text), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
+        .hero p { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .hero .btn { font-size: 1.1rem; padding: 1rem 2rem; }
+        .auth-container { max-width: 450px; margin: 2rem auto; background: rgba(51, 65, 85, 0.3); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 1rem; padding: 2rem; box-shadow: 0 20px 60px var(--shadow); }
+        .auth-container h2 { text-align: center; margin-bottom: 1.5rem; font-size: 1.8rem; color: var(--text); }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text); }
+        .form-control { width: 100%; padding: 0.8rem; border: 2px solid var(--border); border-radius: 0.5rem; background: rgba(15, 23, 42, 0.5); color: var(--text); transition: all 0.3s ease; font-size: 1rem; }
+        .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+        .form-control::placeholder { color: var(--text-secondary); }
+        .alert { padding: 1rem; margin-bottom: 1rem; border-radius: 0.5rem; border: 1px solid transparent; }
+        .alert-success { background: rgba(16, 185, 129, 0.1); color: var(--success); border-color: var(--success); }
+        .alert-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); border-color: var(--danger); }
+        .business-fields { background: rgba(15, 23, 42, 0.3); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1.5rem; margin-top: 1rem; }
+        .business-fields h3 { margin-bottom: 1rem; font-size: 1.1rem; color: var(--accent); }
+        .loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(5px); }
+        .spinner { width: 50px; height: 50px; border: 3px solid rgba(99, 102, 241, 0.3); border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .hidden { display: none !important; }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .hero p { font-size: 1rem; }
-            .auth-container { margin: 1rem; padding: 1.5rem; }
-            .nav-buttons { flex-direction: column; gap: 0.5rem; }
+            .hero h1 { font-size: 2.5rem; } .hero p { font-size: 1rem; } .auth-container { margin: 1rem; padding: 1.5rem; }
+            .nav-buttons { flex-direction: column; align-items: flex-end; }
         }
     </style>
 </head>
@@ -323,8 +71,8 @@
                 <button class="btn btn-primary" onclick="showPage('register')">회원가입</button>
             </div>
             <div id="nav-user" class="nav-buttons hidden">
+                <span id="user-greeting" style="color: var(--text-secondary); align-self: center;"></span>
                 <button class="btn btn-outline" onclick="showPage('myorders')">내 주문</button>
-                <span id="user-greeting" style="margin-right: 1rem; color: var(--text-secondary);"></span>
                 <button class="btn btn-primary" onclick="logout()">로그아웃</button>
             </div>
         </div>
@@ -335,7 +83,9 @@
     </main>
 
     <script>
-        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbVTXteGOD4aTzmBXrbktgJDu77rhYCtqBdmwoS0D2tN1W7JYhKnnhcrslFOHAf1URpw/exec';
+        // ★★★ 여기에 Apps Script 배포 후 생성된 URL을 붙여넣으세요 ★★★
+        const GOOGLE_APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL'; 
+        
         let currentUser = null;
         const loadingEl = document.getElementById('loading');
         const mainContentEl = document.getElementById('main-content');
@@ -348,6 +98,7 @@
                 const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'cors',
+                    cache: 'no-cache',
                     body: JSON.stringify(data),
                     headers: { 'Content-Type': 'application/json' }
                 });
@@ -356,12 +107,7 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
-                const resultText = await response.text();
-                try {
-                    return JSON.parse(resultText);
-                } catch {
-                    return JSON.parse(JSON.parse(resultText));
-                }
+                return await response.json();
             } catch (error) {
                 console.error('API Error:', error);
                 showAlert(document.body, '서버 통신 오류가 발생했습니다.', 'danger');
@@ -392,22 +138,13 @@
                 <div class="page-section active">
                     <div class="hero">
                         <h1>프리미엄 PVC 카드</h1>
-                        <p>최고의 품질과 정확한 제작으로 당신만의 특별한 카드를 만들어보세요.<br>
-                        신분증, 회원카드, 기프트카드 등 모든 종류의 PVC 카드를 전문적으로 제작합니다.</p>
-                        <button class="btn btn-primary" id="startOrderBtn">
-                            ✨ 지금 시작하기
-                        </button>
+                        <p>최고의 품질과 정확한 제작으로 당신만의 특별한 카드를 만들어보세요.<br>신분증, 회원카드, 기프트카드 등 모든 종류의 PVC 카드를 전문적으로 제작합니다.</p>
+                        <button class="btn btn-primary" id="startOrderBtn">✨ 지금 시작하기</button>
                     </div>
-                </div>
-            `;
-            
+                </div>`;
             document.getElementById('startOrderBtn').onclick = () => {
-                if (currentUser) {
-                    renderOrderPage();
-                } else {
-                    renderLoginPage();
-                    showAlert('login-alert', '주문을 위해 먼저 로그인해주세요.', 'danger');
-                }
+                currentUser ? renderOrderPage() : showPage('login');
+                if (!currentUser) showAlert('login-alert', '주문을 위해 먼저 로그인해주세요.', 'warning');
             };
         }
 
@@ -418,19 +155,12 @@
                         <h2>로그인</h2>
                         <div id="login-alert"></div>
                         <form id="loginForm">
-                            <div class="form-group">
-                                <label for="loginEmail">이메일</label>
-                                <input type="email" id="loginEmail" class="form-control" placeholder="이메일을 입력하세요" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="loginPassword">비밀번호</label>
-                                <input type="password" id="loginPassword" class="form-control" placeholder="비밀번호를 입력하세요" required>
-                            </div>
+                            <div class="form-group"><label for="loginEmail">이메일</label><input type="email" id="loginEmail" class="form-control" placeholder="이메일을 입력하세요" required></div>
+                            <div class="form-group"><label for="loginPassword">비밀번호</label><input type="password" id="loginPassword" class="form-control" placeholder="비밀번호를 입력하세요" required></div>
                             <button type="submit" class="btn btn-primary w-100">로그인</button>
                         </form>
                     </div>
-                </div>
-            `;
+                </div>`;
             document.getElementById('loginForm').addEventListener('submit', handleLogin);
         }
 
@@ -441,46 +171,16 @@
                         <h2>회원가입</h2>
                         <div id="register-alert"></div>
                         <form id="registerForm">
-                            <div class="form-group">
-                                <label for="userType">회원 유형</label>
-                                <select id="userType" class="form-control" required>
-                                    <option value="individual">개인</option>
-                                    <option value="business">사업자</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="name">이름</label>
-                                <input type="text" id="name" class="form-control" placeholder="이름을 입력하세요" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">이메일</label>
-                                <input type="email" id="email" class="form-control" placeholder="이메일을 입력하세요" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">비밀번호</label>
-                                <input type="password" id="password" class="form-control" placeholder="비밀번호를 입력하세요" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="confirmPassword">비밀번호 확인</label>
-                                <input type="password" id="confirmPassword" class="form-control" placeholder="비밀번호를 다시 입력하세요" required>
-                            </div>
-                            <div id="businessFields" class="business-fields hidden">
-                                <h3>사업자 정보</h3>
-                                <div class="form-group">
-                                    <label for="businessNumber">사업자등록번호</label>
-                                    <input type="text" id="businessNumber" class="form-control" placeholder="사업자등록번호를 입력하세요">
-                                </div>
-                                <div class="form-group">
-                                    <label for="businessName">상호명</label>
-                                    <input type="text" id="businessName" class="form-control" placeholder="상호명을 입력하세요">
-                                </div>
-                            </div>
+                            <div class="form-group"><label for="userType">회원 유형</label><select id="userType" class="form-control" required><option value="individual">개인</option><option value="business">사업자</option></select></div>
+                            <div class="form-group"><label for="name">이름</label><input type="text" id="name" class="form-control" placeholder="이름을 입력하세요" required></div>
+                            <div class="form-group"><label for="email">이메일</label><input type="email" id="email" class="form-control" placeholder="이메일을 입력하세요" required></div>
+                            <div class="form-group"><label for="password">비밀번호</label><input type="password" id="password" class="form-control" placeholder="비밀번호를 입력하세요" required></div>
+                            <div class="form-group"><label for="confirmPassword">비밀번호 확인</label><input type="password" id="confirmPassword" class="form-control" placeholder="비밀번호를 다시 입력하세요" required></div>
+                            <div id="businessFields" class="business-fields hidden"><h3>사업자 정보</h3><div class="form-group"><label for="businessNumber">사업자등록번호</label><input type="text" id="businessNumber" class="form-control" placeholder="사업자등록번호를 입력하세요"></div><div class="form-group"><label for="businessName">상호명</label><input type="text" id="businessName" class="form-control" placeholder="상호명을 입력하세요"></div></div>
                             <button type="submit" class="btn btn-primary w-100">가입하기</button>
                         </form>
                     </div>
-                </div>
-            `;
-            
+                </div>`;
             document.getElementById('userType').onchange = (e) => {
                 document.getElementById('businessFields').classList.toggle('hidden', e.target.value !== 'business');
             };
@@ -501,16 +201,12 @@
         async function handleLogin(e) {
             e.preventDefault();
             const form = e.target;
-            const result = await apiCall({
-                action: 'login',
-                email: form.loginEmail.value,
-                password: form.loginPassword.value
-            });
-            
+            const result = await apiCall({ action: 'login', email: form.loginEmail.value, password: form.loginPassword.value });
             if (result.success) {
                 currentUser = result.user;
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                checkLoginStatus();
+                updateNav(true);
+                renderHomePage();
                 showAlert(document.body, '로그인되었습니다!', 'success');
             } else {
                 showAlert('login-alert', result.message, 'danger');
@@ -520,27 +216,16 @@
         async function handleRegister(e) {
             e.preventDefault();
             const form = e.target;
-            
             if (form.password.value !== form.confirmPassword.value) {
                 showAlert('register-alert', '비밀번호가 일치하지 않습니다.', 'danger');
                 return;
             }
-            
-            const data = {
-                action: 'register',
-                userType: form.userType.value,
-                name: form.name.value,
-                email: form.email.value,
-                password: form.password.value
-            };
-            
+            const data = { action: 'register', userType: form.userType.value, name: form.name.value, email: form.email.value, password: form.password.value };
             if (form.userType.value === 'business') {
                 data.businessNumber = form.businessNumber.value;
                 data.businessName = form.businessName.value;
             }
-            
             const result = await apiCall(data);
-            
             if (result.success) {
                 renderLoginPage();
                 showAlert('login-alert', '회원가입 성공! 로그인해주세요.', 'success');
@@ -552,7 +237,8 @@
         function logout() {
             currentUser = null;
             localStorage.removeItem('currentUser');
-            checkLoginStatus();
+            updateNav(false);
+            renderHomePage();
             showAlert(document.body, '로그아웃되었습니다.', 'success');
         }
 
@@ -560,70 +246,24 @@
             mainContentEl.innerHTML = `
                 <div class="page-section active">
                     <div class="auth-container" style="max-width: 600px;">
-                        <h2>PVC 카드 주문</h2>
-                        <div id="order-alert"></div>
+                        <h2>PVC 카드 주문</h2><div id="order-alert"></div>
                         <form id="orderForm">
-                            <div class="form-group">
-                                <label for="cardType">카드 타입</label>
-                                <select id="cardType" class="form-control" required>
-                                    <option value="">선택하세요</option>
-                                    <option value="standard">표준 카드</option>
-                                    <option value="premium">프리미엄 카드</option>
-                                    <option value="magnetic">마그네틱 카드</option>
-                                    <option value="rfid">RFID 카드</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="quantity">수량</label>
-                                <input type="number" id="quantity" class="form-control" min="1" max="10000" placeholder="수량을 입력하세요" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="design">디자인 요구사항</label>
-                                <textarea id="design" class="form-control" rows="4" placeholder="디자인 요구사항을 입력하세요" required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="additionalInfo">추가 정보</label>
-                                <textarea id="additionalInfo" class="form-control" rows="3" placeholder="추가 요청사항이 있으면 입력하세요"></textarea>
-                            </div>
+                            <div class="form-group"><label for="cardType">카드 타입</label><select id="cardType" class="form-control" required><option value="">선택하세요</option><option value="standard">표준 카드</option><option value="premium">프리미엄 카드</option><option value="magnetic">마그네틱 카드</option><option value="rfid">RFID 카드</option></select></div>
+                            <div class="form-group"><label for="quantity">수량</label><input type="number" id="quantity" class="form-control" min="1" max="10000" placeholder="수량을 입력하세요" required></div>
+                            <div class="form-group"><label for="design">디자인 요구사항</label><textarea id="design" class="form-control" rows="4" placeholder="디자인 요구사항을 입력하세요" required></textarea></div>
+                            <div class="form-group"><label for="additionalInfo">추가 정보</label><textarea id="additionalInfo" class="form-control" rows="3" placeholder="추가 요청사항이 있으면 입력하세요"></textarea></div>
                             <button type="submit" class="btn btn-primary w-100">주문하기</button>
                         </form>
                     </div>
-                </div>
-            `;
+                </div>`;
             document.getElementById('orderForm').addEventListener('submit', handleOrder);
-        }
-
-        function renderMyOrdersPage() {
-            mainContentEl.innerHTML = `
-                <div class="page-section active">
-                    <div class="auth-container" style="max-width: 800px;">
-                        <h2>내 주문 내역</h2>
-                        <div id="orders-content">
-                            <div class="spinner" style="margin: 2rem auto;"></div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            loadMyOrders();
         }
 
         async function handleOrder(e) {
             e.preventDefault();
             const form = e.target;
-            
-            const orderData = {
-                action: 'createOrder',
-                userId: currentUser.id,
-                userName: currentUser.name,
-                userEmail: currentUser.email,
-                cardType: form.cardType.value,
-                quantity: parseInt(form.quantity.value),
-                design: form.design.value,
-                additionalInfo: form.additionalInfo.value
-            };
-            
+            const orderData = { action: 'createOrder', userId: currentUser.id, userName: currentUser.name, cardType: form.cardType.value, quantity: parseInt(form.quantity.value), design: form.design.value, additionalInfo: form.additionalInfo.value };
             const result = await apiCall(orderData);
-            
             if (result.success) {
                 showAlert('order-alert', '주문이 성공적으로 접수되었습니다!', 'success');
                 form.reset();
@@ -633,97 +273,60 @@
             }
         }
 
+        function renderMyOrdersPage() {
+            mainContentEl.innerHTML = `
+                <div class="page-section active" style="width: 100%;">
+                    <div class="auth-container" style="max-width: 800px;">
+                        <h2>내 주문 내역</h2>
+                        <div id="orders-content"><div class="spinner" style="margin: 2rem auto;"></div></div>
+                    </div>
+                </div>`;
+            loadMyOrders();
+        }
+
         async function loadMyOrders() {
-            const result = await apiCall({
-                action: 'getUserOrders',
-                userId: currentUser.id
-            });
-            
+            const result = await apiCall({ action: 'getUserOrders', userId: currentUser.id });
             const contentEl = document.getElementById('orders-content');
-            
             if (result.success && result.orders.length > 0) {
-                let html = '';
-                result.orders.forEach(order => {
-                    const statusText = {
-                        'pending': '접수 대기',
-                        'processing': '제작 중',
-                        'completed': '완료',
-                        'cancelled': '취소됨'
-                    }[order.status] || order.status;
-                    
-                    const statusColor = {
-                        'pending': 'var(--warning)',
-                        'processing': 'var(--primary)',
-                        'completed': 'var(--success)',
-                        'cancelled': 'var(--danger)'
-                    }[order.status] || 'var(--text-secondary)';
-                    
-                    html += `
-                        <div style="background: rgba(51, 65, 85, 0.3); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1rem;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                <h3 style="margin: 0; color: var(--text);">주문 #${order.id}</h3>
-                                <span style="background: ${statusColor}; color: white; padding: 0.3rem 0.8rem; border-radius: 0.3rem; font-size: 0.9rem;">${statusText}</span>
-                            </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                                <div>
-                                    <strong>카드 타입:</strong> ${order.cardType}<br>
-                                    <strong>수량:</strong> ${order.quantity}개
-                                </div>
-                                <div>
-                                    <strong>주문일:</strong> ${new Date(order.orderDate).toLocaleDateString()}<br>
-                                    <strong>예상 완료:</strong> ${order.expectedDate || '미정'}
-                                </div>
-                            </div>
-                            <div style="margin-bottom: 1rem;">
-                                <strong>디자인 요구사항:</strong><br>
-                                <div style="background: rgba(15, 23, 42, 0.5); padding: 0.8rem; border-radius: 0.3rem; margin-top: 0.5rem;">${order.design}</div>
-                            </div>
-                            ${order.additionalInfo ? `
-                                <div>
-                                    <strong>추가 정보:</strong><br>
-                                    <div style="background: rgba(15, 23, 42, 0.5); padding: 0.8rem; border-radius: 0.3rem; margin-top: 0.5rem;">${order.additionalInfo}</div>
-                                </div>
-                            ` : ''}
+                const statusText = {'pending': '접수 대기', 'processing': '제작 중', 'completed': '완료', 'cancelled': '취소됨'};
+                const statusColor = {'pending': 'var(--warning)', 'processing': 'var(--primary)', 'completed': 'var(--success)', 'cancelled': 'var(--danger)'};
+                let html = result.orders.map(order => `
+                    <div style="background: rgba(51, 65, 85, 0.3); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                            <h3 style="margin: 0; color: var(--text);">주문 #${order.id}</h3>
+                            <span style="background-color: ${statusColor[order.status] || 'var(--text-secondary)'}; color: white; padding: 0.3rem 0.8rem; border-radius: 0.3rem; font-size: 0.9rem;">${statusText[order.status] || order.status}</span>
                         </div>
-                    `;
-                });
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                            <div><strong>카드 타입:</strong> ${order.cardType}<br><strong>수량:</strong> ${order.quantity}개</div>
+                            <div><strong>주문일:</strong> ${new Date(order.orderDate).toLocaleDateString()}<br><strong>예상 완료:</strong> ${order.expectedDate || '미정'}</div>
+                        </div>
+                        <div style="margin-bottom: 1rem;"><strong>디자인 요구사항:</strong><div style="background: rgba(15, 23, 42, 0.5); padding: 0.8rem; border-radius: 0.3rem; margin-top: 0.5rem; white-space: pre-wrap; word-break: break-all;">${order.design}</div></div>
+                        ${order.additionalInfo ? `<div><strong>추가 정보:</strong><div style="background: rgba(15, 23, 42, 0.5); padding: 0.8rem; border-radius: 0.3rem; margin-top: 0.5rem; white-space: pre-wrap; word-break: break-all;">${order.additionalInfo}</div></div>` : ''}
+                    </div>`).join('');
                 contentEl.innerHTML = html;
             } else {
                 contentEl.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-secondary);">주문 내역이 없습니다.</div>';
             }
         }
 
-        function showLoading(show) {
-            loadingEl.classList.toggle('hidden', !show);
-        }
-
+        function showLoading(show) { loadingEl.classList.toggle('hidden', !show); }
         function showAlert(containerId, message, type) {
             const container = typeof containerId === 'string' ? document.getElementById(containerId) : containerId;
-            
+            const alertId = 'temp-alert';
+            let alertEl = document.getElementById(alertId);
+            if (!alertEl) {
+                alertEl = document.createElement('div');
+                alertEl.id = alertId;
+            }
+            alertEl.className = `alert alert-${type}`;
             if (container && container.id) {
                 container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
-                setTimeout(() => {
-                    if (container) container.innerHTML = '';
-                }, 5000);
+                setTimeout(() => { if (container) container.innerHTML = ''; }, 5000);
             } else {
-                const alertEl = document.createElement('div');
-                alertEl.className = `alert alert-${type}`;
-                alertEl.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    z-index: 10000;
-                    min-width: 300px;
-                    text-align: center;
-                `;
+                alertEl.style.cssText = `position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 10000; min-width: 300px; text-align: center;`;
                 alertEl.textContent = message;
                 document.body.appendChild(alertEl);
-                setTimeout(() => {
-                    if (document.body.contains(alertEl)) {
-                        document.body.removeChild(alertEl);
-                    }
-                }, 5000);
+                setTimeout(() => { if (document.body.contains(alertEl)) document.body.removeChild(alertEl); }, 5000);
             }
         }
     </script>
