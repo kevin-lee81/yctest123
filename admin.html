@@ -1,11 +1,10 @@
-<!-- [admin.html - 최종 수정본] -->
+<!-- [admin.html - 최종 완성본] -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CARD-PRO 관리자</title>
-    <!-- 스타일 코드는 이전과 동일하므로 생략합니다. 필요시 이전 코드에서 복사하세요. -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <style>
         :root {
@@ -15,16 +14,18 @@
             --border: #475569; --shadow: rgba(0, 0, 0, 0.3);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, var(--bg) 0%, #1e293b 100%); color: var(--text); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
-        .sidebar { width: 280px; background: rgba(51, 65, 85, 0.3); backdrop-filter: blur(10px); border-right: 1px solid var(--border); padding: 2rem 0; position: fixed; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; }
+        html, body { height: 100%; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, var(--bg) 0%, #1e293b 100%); color: var(--text); line-height: 1.6; display: none; /* Initially hidden */ }
+        .wrapper { display: flex; min-height: 100vh; }
+        .sidebar { width: 280px; background: rgba(51, 65, 85, 0.3); backdrop-filter: blur(10px); border-right: 1px solid var(--border); padding: 2rem 0; display: flex; flex-direction: column; justify-content: space-between; }
         .sidebar-header { text-align: center; margin-bottom: 2rem; padding: 0 1.5rem; }
         .sidebar-header h1 { font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .sidebar-nav { list-style: none; padding: 0 1rem; }
         .sidebar-nav li { margin-bottom: 0.5rem; }
         .sidebar-nav a { display: flex; align-items: center; padding: 0.8rem 1rem; color: var(--text-secondary); text-decoration: none; border-radius: 0.5rem; transition: all 0.3s ease; gap: 0.8rem; }
         .sidebar-nav a:hover, .sidebar-nav a.active { background: rgba(99, 102, 241, 0.1); color: var(--primary); }
-        .sidebar-footer { margin-top: auto; padding: 2rem 1.5rem 1rem; } /* 로그아웃 버튼용 푸터 */
-        .main-content { flex: 1; margin-left: 280px; padding: 2rem; }
+        .sidebar-footer { padding: 1rem 1.5rem; }
+        .main-content { flex: 1; padding: 2rem; overflow-y: auto; }
         .page-header { margin-bottom: 2rem; }
         .page-header h1 { font-size: 2rem; font-weight: 700; color: var(--text); }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
@@ -63,31 +64,32 @@
         .alert { padding: 1rem; margin: 1.5rem 0; border-radius: 0.5rem; border: 1px solid transparent; }
         .alert-success { background: rgba(16, 185, 129, 0.1); color: var(--success); border-color: var(--success); }
         .alert-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); border-color: var(--danger); }
-        @media (max-width: 992px) { body {flex-direction: row;} .sidebar { width: 250px; } .main-content { margin-left: 250px; padding: 1rem; } }
-        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { width: 100%; position: relative; height: auto; border-right: none; border-bottom: 1px solid var(--border); } .main-content { margin-left: 0; } .stats-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
+        @media (max-width: 992px) { .sidebar { width: 250px; } .main-content { margin-left: 250px; padding: 1rem; } }
+        @media (max-width: 768px) { .wrapper { flex-direction: column; } .sidebar { width: 100%; position: relative; height: auto; border-right: none; border-bottom: 1px solid var(--border); flex-direction: row; align-items: center; justify-content: space-between; padding: 1rem; } .sidebar-header { margin: 0; } .sidebar-nav { display: flex; gap: 0.5rem; padding: 0; } .sidebar-footer { padding: 0; } .main-content { margin-left: 0; } .stats-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
     </style>
 </head>
-<body style="display: none;"> <!-- ★★★ 초기에 숨김 처리 -->
-    <aside class="sidebar">
-        <div>
-            <div class="sidebar-header">
-                <h1>CARD-PRO</h1><p style="color: var(--text-secondary); font-size: 0.9rem;">관리자 대시보드</p>
+<body>
+    <div class="wrapper">
+        <aside class="sidebar">
+            <div>
+                <div class="sidebar-header">
+                    <h1>CARD-PRO</h1><p style="color: var(--text-secondary); font-size: 0.9rem;">관리자 대시보드</p>
+                </div>
+                <ul class="sidebar-nav">
+                    <li><a href="#" onclick="loadContent('dashboard')" class="active">📊 대시보드</a></li>
+                    <li><a href="#" onclick="loadContent('orders')">📋 주문 관리</a></li>
+                    <li><a href="#" onclick="loadContent('customers')">👥 고객 관리</a></li>
+                </ul>
             </div>
-            <ul class="sidebar-nav">
-                <li><a href="#" onclick="loadContent('dashboard')" class="active">📊 대시보드</a></li>
-                <li><a href="#" onclick="loadContent('orders')">📋 주문 관리</a></li>
-                <li><a href="#" onclick="loadContent('customers')">👥 고객 관리</a></li>
-            </ul>
-        </div>
-        <!-- ★★★ 로그아웃 버튼 추가 ★★★ -->
-        <div class="sidebar-footer">
-            <button class="btn btn-danger" style="width: 100%;" onclick="adminLogout()">로그아웃</button>
-        </div>
-    </aside>
-    <main class="main-content">
-        <div id="content-area"><div class="loading"><div class="spinner"></div></div></div>
-        <div id="global-alert"></div>
-    </main>
+            <div class="sidebar-footer">
+                <button class="btn btn-danger" style="width: 100%;" onclick="adminLogout()">로그아웃</button>
+            </div>
+        </aside>
+        <main class="main-content">
+            <div id="content-area"><div class="loading"><div class="spinner"></div></div></div>
+            <div id="global-alert"></div>
+        </main>
+    </div>
     <div id="updateModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeUpdateModal()">×</span>
@@ -101,30 +103,29 @@
         </div>
     </div>
     <script>
-        // ★★★★★ 핵심 수정: 관리자 인증 체크 ★★★★★
         document.addEventListener('DOMContentLoaded', () => {
-            // sessionStorage에 로그인 정보가 없으면, 로그인 페이지로 강제 이동
-            if (sessionStorage.getItem('isAdminLoggedIn') !== 'true') {
-                alert('접근 권한이 없습니다. 먼저 로그인해주세요.');
-                window.location.href = 'index.html';
-                return; // 이후 스크립트 실행 중단
-            }
+            const savedUser = localStorage.getItem('currentUser');
+            let currentUser = null;
+            if (savedUser) { currentUser = JSON.parse(savedUser); }
 
-            // 인증 성공 시에만 페이지를 보여주고, 나머지 기능 로드
-            document.body.style.display = 'flex';
+            if (!currentUser || currentUser.userType !== 'admin') {
+                alert('관리자만 접근할 수 있는 페이지입니다.');
+                window.location.href = './index.html';
+                return;
+            }
+            
+            document.body.style.display = 'block';
             loadContent('dashboard');
             document.getElementById('updateForm').addEventListener('submit', handleUpdateStatus);
         });
 
-        // ★★★ 로그아웃 함수 추가 ★★★
         function adminLogout() {
-            sessionStorage.removeItem('isAdminLoggedIn');
-            window.location.href = 'index.html';
+            localStorage.removeItem('currentUser');
+            window.location.href = './index.html';
         }
 
         const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbVTXteGOD4aTzmBXrbktgJDu77rhYCtqBdmwoS0D2tN1W7JYhKnnhcrslFOHAf1URpw/exec';
 
-        // --- 이하 다른 함수들은 이전과 동일합니다 ---
         async function apiCall(data) {
             try {
                 const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {method: 'POST', mode: 'cors', cache: 'no-cache', body: JSON.stringify(data), headers: { 'Content-Type': 'application/json' }});
