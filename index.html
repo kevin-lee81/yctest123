@@ -61,36 +61,41 @@
     </header>
     <main class="container" id="main-content"></main>
     <script>
-        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbVTXteGOD4aTzmBXrbktgJDu77rhYCtqBdmwoS0D2tN1W7JYhKnnhcrslFOHAf1URpw/exec'; // ⚠️ 본인의 URL로 교체!
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbVTXteGOD4aTzmBXrbktgJDu77rhYCtqBdmwoS0D2tN1W7JYhKnnhcrslFOHAf1URpw/exec';
         let currentUser = null;
         const loadingEl = document.getElementById('loading');
         const mainContentEl = document.getElementById('main-content');
 
         document.addEventListener('DOMContentLoaded', checkLoginStatus);
-        
-        // --- API 통신 ---
+
         async function apiCall(data) {
             showLoading(true);
             try {
                 const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-                    method: 'POST', mode: 'cors', redirect: 'follow',
-                    body: JSON.stringify(data), headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    method: 'POST',
+                    mode: 'cors', // CORS 모드 설정
+                    body: JSON.stringify(data),
+                    headers: { 'Content-Type': 'application/json' }
                 });
-                return await response.json();
+                if (!response.ok) {
+                   throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const resultText = await response.text();
+                // Google Apps Script가 JSON 문자열을 텍스트로 한번 더 감싸서 반환하는 경우가 있음
+                return JSON.parse(JSON.parse(resultText)); 
             } catch (error) {
                 console.error('API Error:', error);
-                return { success: false, message: '서버 통신 오류. 개발자 콘솔(F12)을 확인하세요.' };
+                showAlert(document.body, '서버 통신 오류. 개발자 콘솔(F12)을 확인하세요.', 'danger');
+                return { success: false, message: '서버 통신 오류' };
             } finally {
                 showLoading(false);
             }
         }
 
-        // --- 페이지 및 네비게이션 제어 ---
         function showPage(pageName) {
             if (pageName === 'home') renderHomePage();
             else if (pageName === 'login') renderLoginPage();
             else if (pageName === 'register') renderRegisterPage();
-            // 대시보드는 로그인 후 자동 이동
         }
 
         function updateNav(isLoggedIn) {
@@ -101,12 +106,11 @@
             }
         }
         
-        // --- 렌더링 함수들 ---
         function renderHomePage() {
             mainContentEl.innerHTML = `<div class="page-section active"><div class="hero"><h1>최고의 퀄리티, 당신만의 PVC 카드</h1><p>신분증, 회원카드, 기프트카드 등 모든 종류의 PVC 카드를 전문적으로 제작합니다.</p><button class="btn btn-primary" id="startOrderBtn">견적 / 주문 시작하기</button></div></div>`;
             document.getElementById('startOrderBtn').onclick = () => {
                 if (currentUser) {
-                    alert("주문 페이지로 이동합니다."); // 주문 기능 추가 시 여기에 구현
+                    alert("주문 페이지로 이동합니다.");
                 } else {
                     renderLoginPage();
                     showAlert('login-alert', '주문을 하시려면 먼저 로그인해주세요.', 'danger');
@@ -123,7 +127,6 @@
             document.getElementById('registerForm').addEventListener('submit', handleRegister);
         }
 
-        // --- 핸들러 함수들 ---
         function checkLoginStatus() {
             const savedUser = localStorage.getItem('currentUser');
             if (savedUser) {
@@ -132,7 +135,7 @@
             } else {
                 updateNav(false);
             }
-            renderHomePage(); // 항상 홈을 먼저 보여줌
+            renderHomePage();
         }
 
         async function handleLogin(e) {
@@ -171,13 +174,23 @@
             checkLoginStatus();
         }
 
-        // --- 유틸리티 함수 ---
         function showLoading(show) { loadingEl.classList.toggle('hidden', !show); }
-        function showAlert(id, msg, type) { 
+        function showAlert(id, msg, type) {
             const el = document.getElementById(id);
-            if (el) {
-                el.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
-                setTimeout(() => { if (el) el.innerHTML = ''; }, 5000);
+            if(el){
+              el.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+              setTimeout(() => { if(el) el.innerHTML = ''; }, 5000);
+            } else if (id === document.body) { // 페이지 전체에 대한 경고
+              const alertEl = document.createElement('div');
+              alertEl.className = `alert alert-${type}`;
+              alertEl.style.position = 'fixed';
+              alertEl.style.top = '20px';
+              alertEl.style.left = '50%';
+              alertEl.style.transform = 'translateX(-50%)';
+              alertEl.style.zIndex = '10000';
+              alertEl.textContent = msg;
+              document.body.appendChild(alertEl);
+              setTimeout(() => document.body.removeChild(alertEl), 5000);
             }
         }
     </script>
