@@ -1,4 +1,4 @@
-<!-- [index.html - 최종 통합본] -->
+<!-- [index.html - 최종 완성본] -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -86,40 +86,32 @@
 
         document.addEventListener('DOMContentLoaded', checkLoginStatus);
         
-        // ★★★ 로그인 상태 확인 로직 수정 ★★★
         function checkLoginStatus() {
             const savedUser = localStorage.getItem('currentUser');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
-                // 브라우저에 저장된 사용자가 관리자이면, admin 페이지로 보냄
                 if (currentUser.userType === 'admin') {
-                    window.location.href = 'admin.html';
-                    return; // 페이지 이동 후 더 이상 진행하지 않음
+                    window.location.href = './admin.html';
+                    return; 
                 }
-                // 일반 사용자일 경우
                 updateNav(true);
                 renderHomePage();
             } else {
-                // 로그인 정보가 없을 경우
                 updateNav(false);
                 renderHomePage();
             }
         }
 
-        // ★★★ 로그인 핸들러 수정 ★★★
         async function handleLogin(e) {
             e.preventDefault();
             const form = e.target;
             const result = await apiCall({ action: 'login', email: form.loginEmail.value, password: form.loginPassword.value });
             
             if (result.success && result.user) {
-                // 서버에서 받은 사용자 정보를 브라우저 저장소(localStorage)에 저장
                 currentUser = result.user;
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
-
-                // 사용자 유형에 따라 분기 처리
                 if (currentUser.userType === 'admin') {
-                    window.location.href = 'admin.html'; // 관리자 페이지로 이동
+                    window.location.href = './admin.html';
                 } else {
                     updateNav(true);
                     renderHomePage();
@@ -129,8 +121,7 @@
                 showAlert('login-alert', result.message || '로그인에 실패했습니다.', 'danger');
             }
         }
-
-        // --- 이하 함수들은 변경 없음 ---
+        
         async function apiCall(data) {
             showLoading(true);
             try {
