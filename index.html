@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CARD-PRO - 프리미엄 PVC 카드 제작</title>
+    <!-- 스타일 코드는 이전과 동일하므로 생략합니다. 필요시 이전 코드에서 복사하세요. -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <style>
         :root {
@@ -52,17 +53,10 @@
         .spinner { width: 50px; height: 50px; border: 3px solid rgba(99, 102, 241, 0.3); border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .hidden { display: none !important; }
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; } .hero p { font-size: 1rem; } .auth-container { margin: 1rem; padding: 1.5rem; }
-            .nav-buttons { flex-direction: column; align-items: flex-end; }
-        }
     </style>
 </head>
 <body>
-    <div id="loading" class="loading hidden">
-        <div class="spinner"></div>
-    </div>
-    
+    <div id="loading" class="loading hidden"><div class="spinner"></div></div>
     <header class="header">
         <div class="container">
             <div class="logo" onclick="showPage('home')">CARD-PRO</div>
@@ -77,36 +71,64 @@
             </div>
         </div>
     </header>
-
-    <main class="container">
-        <div id="main-content"></div>
-    </main>
-
+    <main class="container"><div id="main-content"></div></main>
     <script>
-        // 제공해주신 웹 앱 URL을 사용합니다.
         const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbVTXteGOD4aTzmBXrbktgJDu77rhYCtqBdmwoS0D2tN1W7JYhKnnhcrslFOHAf1URpw/exec'; 
-        
         let currentUser = null;
         const loadingEl = document.getElementById('loading');
         const mainContentEl = document.getElementById('main-content');
 
         document.addEventListener('DOMContentLoaded', checkLoginStatus);
 
+        // ★★★ 로그인 상태 확인 로직에서 관리자 관련 부분 완전히 제거 ★★★
+        function checkLoginStatus() {
+            // localStorage에서 일반 사용자 정보만 확인
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateNav(true);
+                renderHomePage();
+            } else {
+                updateNav(false);
+                renderHomePage();
+            }
+        }
+
+        // ★★★★★ 핵심 수정: 로그인 핸들러 ★★★★★
+        async function handleLogin(e) {
+            e.preventDefault();
+            const form = e.target;
+            const result = await apiCall({
+                action: 'login',
+                email: form.loginEmail.value,
+                password: form.loginPassword.value
+            });
+            
+            if (result.success) {
+                // 서버 응답에서 userType을 확인
+                if (result.userType === 'admin') {
+                    // 관리자일 경우, admin.html로 이동시키기 전에 세션에 로그인 상태 저장
+                    sessionStorage.setItem('isAdminLoggedIn', 'true');
+                    window.location.href = 'admin.html'; // admin.html로 리다이렉트
+                } else {
+                    // 일반 사용자일 경우, 기존 로직 수행
+                    currentUser = result.user;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    updateNav(true);
+                    renderHomePage();
+                    showAlert(document.body, '로그인되었습니다!', 'success');
+                }
+            } else {
+                showAlert('login-alert', result.message, 'danger');
+            }
+        }
+
+        // --- 이하 다른 함수들은 이전과 거의 동일합니다 (로직 변경 없음) ---
         async function apiCall(data) {
             showLoading(true);
             try {
-                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    cache: 'no-cache',
-                    body: JSON.stringify(data),
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
+                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {method: 'POST', mode: 'cors', cache: 'no-cache', body: JSON.stringify(data), headers: { 'Content-Type': 'application/json' }});
+                if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
                 return await response.json();
             } catch (error) {
                 console.error('API Error:', error);
@@ -116,7 +138,6 @@
                 showLoading(false);
             }
         }
-
         function showPage(pageName) {
             if (pageName === 'home') renderHomePage();
             else if (pageName === 'login') renderLoginPage();
@@ -124,135 +145,33 @@
             else if (pageName === 'order') renderOrderPage();
             else if (pageName === 'myorders') renderMyOrdersPage();
         }
-
         function updateNav(isLoggedIn) {
             document.getElementById('nav-guest').classList.toggle('hidden', isLoggedIn);
             document.getElementById('nav-user').classList.toggle('hidden', !isLoggedIn);
-            if (isLoggedIn) {
-                document.getElementById('user-greeting').textContent = `${currentUser.name}님 환영합니다`;
-            }
+            if (isLoggedIn) { document.getElementById('user-greeting').textContent = `${currentUser.name}님 환영합니다`; }
         }
-        
         function renderHomePage() {
-            mainContentEl.innerHTML = `
-                <div class="page-section active">
-                    <div class="hero">
-                        <h1>프리미엄 PVC 카드</h1>
-                        <p>최고의 품질과 정확한 제작으로 당신만의 특별한 카드를 만들어보세요.<br>신분증, 회원카드, 기프트카드 등 모든 종류의 PVC 카드를 전문적으로 제작합니다.</p>
-                        <button class="btn btn-primary" id="startOrderBtn">✨ 지금 시작하기</button>
-                    </div>
-                </div>`;
-            document.getElementById('startOrderBtn').onclick = () => {
-                currentUser ? renderOrderPage() : showPage('login');
-                if (!currentUser) showAlert(document.getElementById('main-content'), '주문을 위해 먼저 로그인해주세요.', 'warning');
-            };
+            mainContentEl.innerHTML = `<div class="page-section active"><div class="hero"><h1>프리미엄 PVC 카드</h1><p>최고의 품질과 정확한 제작으로 당신만의 특별한 카드를 만들어보세요.<br>신분증, 회원카드, 기프트카드 등 모든 종류의 PVC 카드를 전문적으로 제작합니다.</p><button class="btn btn-primary" id="startOrderBtn">✨ 지금 시작하기</button></div></div>`;
+            document.getElementById('startOrderBtn').onclick = () => { currentUser ? renderOrderPage() : showPage('login'); if (!currentUser) showAlert(document.getElementById('main-content'), '주문을 위해 먼저 로그인해주세요.', 'warning'); };
         }
-
         function renderLoginPage() {
-            mainContentEl.innerHTML = `
-                <div class="page-section active">
-                    <div class="auth-container">
-                        <h2>로그인</h2>
-                        <div id="login-alert"></div>
-                        <form id="loginForm">
-                            <div class="form-group"><label for="loginEmail">이메일</label><input type="email" id="loginEmail" class="form-control" placeholder="이메일을 입력하세요" required></div>
-                            <div class="form-group"><label for="loginPassword">비밀번호</label><input type="password" id="loginPassword" class="form-control" placeholder="비밀번호를 입력하세요" required></div>
-                            <button type="submit" class="btn btn-primary w-100">로그인</button>
-                        </form>
-                    </div>
-                </div>`;
+            mainContentEl.innerHTML = `<div class="page-section active"><div class="auth-container"><h2>로그인</h2><div id="login-alert"></div><form id="loginForm"><div class="form-group"><label for="loginEmail">계정 (이메일 또는 관리자 ID)</label><input type="text" id="loginEmail" class="form-control" placeholder="계정을 입력하세요" required></div><div class="form-group"><label for="loginPassword">비밀번호</label><input type="password" id="loginPassword" class="form-control" placeholder="비밀번호를 입력하세요" required></div><button type="submit" class="btn btn-primary w-100">로그인</button></form></div></div>`;
             document.getElementById('loginForm').addEventListener('submit', handleLogin);
         }
-
         function renderRegisterPage() {
-            mainContentEl.innerHTML = `
-                <div class="page-section active">
-                    <div class="auth-container">
-                        <h2>회원가입</h2>
-                        <div id="register-alert"></div>
-                        <form id="registerForm">
-                            <div class="form-group"><label for="userType">회원 유형</label><select id="userType" class="form-control" required><option value="individual">개인</option><option value="business">사업자</option></select></div>
-                            <div class="form-group"><label for="name">이름</label><input type="text" id="name" class="form-control" placeholder="이름을 입력하세요" required></div>
-                            <div class="form-group"><label for="email">이메일</label><input type="email" id="email" class="form-control" placeholder="이메일을 입력하세요" required></div>
-                            <div class="form-group"><label for="password">비밀번호</label><input type="password" id="password" class="form-control" placeholder="비밀번호를 입력하세요" required></div>
-                            <div class="form-group"><label for="confirmPassword">비밀번호 확인</label><input type="password" id="confirmPassword" class="form-control" placeholder="비밀번호를 다시 입력하세요" required></div>
-                            <div id="businessFields" class="business-fields hidden"><h3>사업자 정보</h3><div class="form-group"><label for="businessNumber">사업자등록번호</label><input type="text" id="businessNumber" class="form-control" placeholder="사업자등록번호를 입력하세요"></div><div class="form-group"><label for="businessName">상호명</label><input type="text" id="businessName" class="form-control" placeholder="상호명을 입력하세요"></div></div>
-                            <button type="submit" class="btn btn-primary w-100">가입하기</button>
-                        </form>
-                    </div>
-                </div>`;
-            document.getElementById('userType').onchange = (e) => {
-                document.getElementById('businessFields').classList.toggle('hidden', e.target.value !== 'business');
-            };
+            mainContentEl.innerHTML = `<div class="page-section active"><div class="auth-container"><h2>회원가입</h2><div id="register-alert"></div><form id="registerForm"><div class="form-group"><label for="userType">회원 유형</label><select id="userType" class="form-control" required><option value="individual">개인</option><option value="business">사업자</option></select></div><div class="form-group"><label for="name">이름</label><input type="text" id="name" class="form-control" placeholder="이름을 입력하세요" required></div><div class="form-group"><label for="email">이메일</label><input type="email" id="email" class="form-control" placeholder="이메일을 입력하세요" required></div><div class="form-group"><label for="password">비밀번호</label><input type="password" id="password" class="form-control" placeholder="비밀번호를 입력하세요" required></div><div class="form-group"><label for="confirmPassword">비밀번호 확인</label><input type="password" id="confirmPassword" class="form-control" placeholder="비밀번호를 다시 입력하세요" required></div><div id="businessFields" class="business-fields hidden"><h3>사업자 정보</h3><div class="form-group"><label for="businessNumber">사업자등록번호</label><input type="text" id="businessNumber" class="form-control" placeholder="사업자등록번호를 입력하세요"></div><div class="form-group"><label for="businessName">상호명</label><input type="text" id="businessName" class="form-control" placeholder="상호명을 입력하세요"></div></div><button type="submit" class="btn btn-primary w-100">가입하기</button></form></div></div>`;
+            document.getElementById('userType').onchange = (e) => { document.getElementById('businessFields').classList.toggle('hidden', e.target.value !== 'business'); };
             document.getElementById('registerForm').addEventListener('submit', handleRegister);
         }
-
-        function checkLoginStatus() {
-            const savedUser = localStorage.getItem('currentUser');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                // ★ 관리자 리다이렉션 로직 추가
-                if (currentUser.userType === 'admin') {
-                    // admin.html 파일이 같은 폴더에 있다고 가정합니다.
-                    window.location.href = 'admin.html';
-                    return; // 페이지 이동 후 더 이상 진행하지 않음
-                }
-                updateNav(true);
-                renderHomePage(); // 일반 사용자는 홈 페이지 렌더링
-            } else {
-                updateNav(false);
-                renderHomePage(); // 비로그인 사용자
-            }
-        }
-
-        async function handleLogin(e) {
-            e.preventDefault();
-            const form = e.target;
-            const result = await apiCall({ action: 'login', email: form.loginEmail.value, password: form.loginPassword.value });
-            
-            if (result.success) {
-                // ★★★★★ 핵심 수정 부분 ★★★★★
-                // 로그인 성공 시 사용자 유형 확인
-                if (result.user.userType === 'admin') {
-                    // 관리자일 경우, 정보를 저장하고 admin.html로 페이지 이동
-                    localStorage.setItem('currentUser', JSON.stringify(result.user));
-                    window.location.href = 'admin.html'; // admin.html로 리다이렉트
-                    return; // 함수 실행 종료
-                }
-                // ★★★★★ 여기까지 ★★★★★
-
-                // 일반 사용자일 경우
-                currentUser = result.user;
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                updateNav(true);
-                renderHomePage();
-                showAlert(document.body, '로그인되었습니다!', 'success');
-            } else {
-                showAlert('login-alert', result.message, 'danger');
-            }
-        }
-
         async function handleRegister(e) {
             e.preventDefault();
             const form = e.target;
-            if (form.password.value !== form.confirmPassword.value) {
-                showAlert('register-alert', '비밀번호가 일치하지 않습니다.', 'danger');
-                return;
-            }
+            if (form.password.value !== form.confirmPassword.value) { showAlert('register-alert', '비밀번호가 일치하지 않습니다.', 'danger'); return; }
             const data = { action: 'register', userType: form.userType.value, name: form.name.value, email: form.email.value, password: form.password.value };
-            if (form.userType.value === 'business') {
-                data.businessNumber = form.businessNumber.value;
-                data.businessName = form.businessName.value;
-            }
+            if (form.userType.value === 'business') { data.businessNumber = form.businessNumber.value; data.businessName = form.businessName.value; }
             const result = await apiCall(data);
-            if (result.success) {
-                renderLoginPage();
-                showAlert('login-alert', '회원가입 성공! 로그인해주세요.', 'success');
-            } else {
-                showAlert('register-alert', result.message, 'danger');
-            }
+            if (result.success) { renderLoginPage(); showAlert('login-alert', '회원가입 성공! 로그인해주세요.', 'success'); } else { showAlert('register-alert', result.message, 'danger'); }
         }
-
         function logout() {
             currentUser = null;
             localStorage.removeItem('currentUser');
@@ -260,79 +179,36 @@
             renderHomePage();
             showAlert(document.body, '로그아웃되었습니다.', 'success');
         }
-
         function renderOrderPage() {
-            mainContentEl.innerHTML = `
-                <div class="page-section active">
-                    <div class="auth-container" style="max-width: 600px;">
-                        <h2>PVC 카드 주문</h2><div id="order-alert"></div>
-                        <form id="orderForm">
-                            <div class="form-group"><label for="cardType">카드 타입</label><select id="cardType" class="form-control" required><option value="">선택하세요</option><option value="standard">표준 카드</option><option value="premium">프리미엄 카드</option><option value="magnetic">마그네틱 카드</option><option value="rfid">RFID 카드</option></select></div>
-                            <div class="form-group"><label for="quantity">수량</label><input type="number" id="quantity" class="form-control" min="1" max="10000" placeholder="수량을 입력하세요" required></div>
-                            <div class="form-group"><label for="design">디자인 요구사항</label><textarea id="design" class="form-control" rows="4" placeholder="디자인 요구사항을 입력하세요" required></textarea></div>
-                            <div class="form-group"><label for="additionalInfo">추가 정보</label><textarea id="additionalInfo" class="form-control" rows="3" placeholder="추가 요청사항이 있으면 입력하세요"></textarea></div>
-                            <button type="submit" class="btn btn-primary w-100">주문하기</button>
-                        </form>
-                    </div>
-                </div>`;
+            mainContentEl.innerHTML = `<div class="page-section active"><div class="auth-container" style="max-width: 600px;"><h2>PVC 카드 주문</h2><div id="order-alert"></div><form id="orderForm"><div class="form-group"><label for="cardType">카드 타입</label><select id="cardType" class="form-control" required><option value="">선택하세요</option><option value="standard">표준 카드</option><option value="premium">프리미엄 카드</option><option value="magnetic">마그네틱 카드</option><option value="rfid">RFID 카드</option></select></div><div class="form-group"><label for="quantity">수량</label><input type="number" id="quantity" class="form-control" min="1" max="10000" placeholder="수량을 입력하세요" required></div><div class="form-group"><label for="design">디자인 요구사항</label><textarea id="design" class="form-control" rows="4" placeholder="디자인 요구사항을 입력하세요" required></textarea></div><div class="form-group"><label for="additionalInfo">추가 정보</label><textarea id="additionalInfo" class="form-control" rows="3" placeholder="추가 요청사항이 있으면 입력하세요"></textarea></div><button type="submit" class="btn btn-primary w-100">주문하기</button></form></div></div>`;
             document.getElementById('orderForm').addEventListener('submit', handleOrder);
         }
-
         async function handleOrder(e) {
             e.preventDefault();
             const form = e.target;
             const orderData = { action: 'createOrder', userId: currentUser.id, userName: currentUser.name, cardType: form.cardType.value, quantity: parseInt(form.quantity.value), design: form.design.value, additionalInfo: form.additionalInfo.value };
             const result = await apiCall(orderData);
-            if (result.success) {
-                showAlert('order-alert', '주문이 성공적으로 접수되었습니다!', 'success');
-                form.reset();
-                setTimeout(() => renderMyOrdersPage(), 2000);
-            } else {
-                showAlert('order-alert', result.message, 'danger');
-            }
+            if (result.success) { showAlert('order-alert', '주문이 성공적으로 접수되었습니다!', 'success'); form.reset(); setTimeout(() => renderMyOrdersPage(), 2000); } else { showAlert('order-alert', result.message, 'danger'); }
         }
-
         function renderMyOrdersPage() {
-            mainContentEl.innerHTML = `
-                <div class="page-section active" style="width: 100%;">
-                    <div class="auth-container" style="max-width: 800px;">
-                        <h2>내 주문 내역</h2>
-                        <div id="orders-content"><div class="spinner" style="margin: 2rem auto;"></div></div>
-                    </div>
-                </div>`;
+            mainContentEl.innerHTML = `<div class="page-section active" style="width: 100%;"><div class="auth-container" style="max-width: 800px;"><h2>내 주문 내역</h2><div id="orders-content"><div class="spinner" style="margin: 2rem auto;"></div></div></div></div>`;
             loadMyOrders();
         }
-
         async function loadMyOrders() {
             const result = await apiCall({ action: 'getUserOrders', userId: currentUser.id });
             const contentEl = document.getElementById('orders-content');
             if (result.success && result.orders.length > 0) {
                 const statusText = {'pending': '접수 대기', 'processing': '제작 중', 'completed': '완료', 'cancelled': '취소됨'};
                 const statusColor = {'pending': 'var(--warning)', 'processing': 'var(--primary)', 'completed': 'var(--success)', 'cancelled': 'var(--danger)'};
-                let html = result.orders.map(order => `
-                    <div style="background: rgba(51, 65, 85, 0.3); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
-                            <h3 style="margin: 0; color: var(--text);">주문 #${order.id}</h3>
-                            <span style="background-color: ${statusColor[order.status] || 'var(--text-secondary)'}; color: white; padding: 0.3rem 0.8rem; border-radius: 0.3rem; font-size: 0.9rem;">${statusText[order.status] || order.status}</span>
-                        </div>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
-                            <div><strong>카드 타입:</strong> ${order.cardType}<br><strong>수량:</strong> ${order.quantity}개</div>
-                            <div><strong>주문일:</strong> ${new Date(order.orderDate).toLocaleDateString()}<br><strong>예상 완료:</strong> ${order.expectedDate || '미정'}</div>
-                        </div>
-                        <div style="margin-bottom: 1rem;"><strong>디자인 요구사항:</strong><div style="background: rgba(15, 23, 42, 0.5); padding: 0.8rem; border-radius: 0.3rem; margin-top: 0.5rem; white-space: pre-wrap; word-break: break-all;">${order.design}</div></div>
-                        ${order.additionalInfo ? `<div><strong>추가 정보:</strong><div style="background: rgba(15, 23, 42, 0.5); padding: 0.8rem; border-radius: 0.3rem; margin-top: 0.5rem; white-space: pre-wrap; word-break: break-all;">${order.additionalInfo}</div></div>` : ''}
-                    </div>`).join('');
-                contentEl.innerHTML = html;
+                contentEl.innerHTML = result.orders.map(order => `<div style="background: rgba(51, 65, 85, 0.3); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1rem;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;"><h3 style="margin: 0; color: var(--text);">주문 #${order.id}</h3><span style="background-color: ${statusColor[order.status] || 'var(--text-secondary)'}; color: white; padding: 0.3rem 0.8rem; border-radius: 0.3rem; font-size: 0.9rem;">${statusText[order.status] || order.status}</span></div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;"><div><strong>카드 타입:</strong> ${order.cardType}<br><strong>수량:</strong> ${order.quantity}개</div><div><strong>주문일:</strong> ${new Date(order.orderDate).toLocaleDateString()}<br><strong>예상 완료:</strong> ${order.expectedDate || '미정'}</div></div><div style="margin-bottom: 1rem;"><strong>디자인 요구사항:</strong><div style="background: rgba(15, 23, 42, 0.5); padding: 0.8rem; border-radius: 0.3rem; margin-top: 0.5rem; white-space: pre-wrap; word-break: break-all;">${order.design}</div></div>${order.additionalInfo ? `<div><strong>추가 정보:</strong><div style="background: rgba(15, 23, 42, 0.5); padding: 0.8rem; border-radius: 0.3rem; margin-top: 0.5rem; white-space: pre-wrap; word-break: break-all;">${order.additionalInfo}</div></div>` : ''}</div>`).join('');
             } else {
                 contentEl.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-secondary);">주문 내역이 없습니다.</div>';
             }
         }
-
         function showLoading(show) { loadingEl.classList.toggle('hidden', !show); }
         function showAlert(containerId, message, type) {
             const container = (typeof containerId === 'string') ? document.getElementById(containerId) : containerId;
             if (!container) { console.error('Alert container not found:', containerId); return; }
-            
             if (container.id && container.id.endsWith('-alert')) {
                 container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
                 setTimeout(() => { if (container) container.innerHTML = ''; }, 5000);
