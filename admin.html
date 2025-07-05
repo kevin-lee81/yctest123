@@ -3,50 +3,439 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>관리자 대시보드</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
-    <style>/* 이전과 동일한 CSS 코드 */</style>
+    <title>CARD-PRO 관리자</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #0f172a;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --text: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --border: #475569;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg) 0%, #1e293b 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(51, 65, 85, 0.3);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border);
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 0 1.5rem;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0 1rem;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            gap: 0.8rem;
+        }
+
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(51, 65, 85, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 0.8rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .content-card {
+            background: rgba(51, 65, 85, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 0.8rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-card h2 {
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.3rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 0.3rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .status-processing {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .status-cancelled {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: rgba(51, 65, 85, 0.95);
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 0.8rem;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid var(--border);
+        }
+
+        .close {
+            color: var(--text-secondary);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: var(--text);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border);
+            border-radius: 0.5rem;
+            background: rgba(15, 23, 42, 0.5);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(99, 102, 241, 0.3);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 250px;
+            }
+            .main-content {
+                margin-left: 250px;
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <aside class="sidebar">
-        <!-- 이전과 동일한 사이드바 HTML -->
+        <div class="sidebar-header">
+            <h1>CARD-PRO</h1>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">관리자 대시보드</p>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a href="#" onclick="loadContent('dashboard')" class="active">📊 대시보드</a></li>
+            <li><a href="#" onclick="loadContent('orders')">📋 주문 관리</a></li>
+            <li><a href="#" onclick="loadContent('customers')">👥 고객 관리</a></li>
+        </ul>
     </aside>
 
     <main class="main-content">
-        <div id="content-area"></div>
+        <div id="content-area">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
     </main>
-    
-    <!-- 주문 상태 업데이트 모달 (이전과 동일) -->
+
+    <!-- 주문 상태 업데이트 모달 -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeUpdateModal()">&times;</span>
+            <h2 style="margin-bottom: 1rem;">주문 상태 업데이트</h2>
+            <form id="updateForm">
+                <div class="form-group">
+                    <label for="newStatus">새로운 상태</label>
+                    <select id="newStatus" class="form-control" required>
+                        <option value="pending">접수 대기</option>
+                        <option value="processing">제작 중</option>
+                        <option value="completed">완료</option>
+                        <option value="cancelled">취소됨</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="expectedDate">예상 완료일</label>
+                    <input type="date" id="expectedDate" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">업데이트</button>
+            </form>
+        </div>
+    </div>
 
     <script>
-        // --- 설정 ---
-        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbVTXteGOD4aTzmBXrbktgJDu77rhYCtqBdmwoS0D2tN1W7JYhKnnhcrslFOHAf1URpw/exec'; // ⚠️ 본인의 웹 앱 URL로 교체!
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbVTXteGOD4aTzmBXrbktgJDu77rhYCtqBdmwoS0D2tN1W7JYhKnnhcrslFOHAf1URpw/exec';
+        let currentOrderId = null;
 
         document.addEventListener('DOMContentLoaded', () => loadContent('dashboard'));
 
-        // API 호출
         async function apiCall(data) {
-            // 로딩 표시 추가 가능
             try {
                 const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-                    method: 'POST', mode: 'cors', redirect: 'follow',
+                    method: 'POST',
+                    mode: 'cors',
                     body: JSON.stringify(data),
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    headers: { 'Content-Type': 'application/json' }
                 });
-                return await response.json();
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const resultText = await response.text();
+                try {
+                    return JSON.parse(resultText);
+                } catch {
+                    return JSON.parse(JSON.parse(resultText));
+                }
             } catch (error) {
                 console.error('API Error:', error);
-                document.getElementById('content-area').innerHTML = `<div class="content-card"><h3>오류</h3><p>서버 통신에 실패했습니다.</p></div>`;
-                return { success: false };
+                return { success: false, message: '서버 통신 오류' };
             }
         }
-        
-        // --- 콘텐츠 로딩 및 렌더링 ---
+
         function loadContent(page) {
             document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
             document.querySelector(`.sidebar-nav a[onclick*="'${page}'"]`).classList.add('active');
+            
             const contentArea = document.getElementById('content-area');
-            contentArea.innerHTML = `<div class="content-card"><p>데이터를 불러오는 중입니다...</p></div>`;
+            contentArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
 
             if (page === 'dashboard') renderDashboardPage();
             else if (page === 'orders') renderOrdersPage();
@@ -54,52 +443,132 @@
         }
 
         async function renderDashboardPage() {
-            // 모든 데이터를 한번에 가져옴
             const [orderResult, customerResult] = await Promise.all([
                 apiCall({ action: 'getAllOrders' }),
                 apiCall({ action: 'getAllCustomers' })
             ]);
-            
-            if (!orderResult.success || !customerResult.success) return;
 
-            const orders = orderResult.orders || [];
-            const customers = customerResult.customers || [];
+            const orders = orderResult.success ? orderResult.orders : [];
+            const customers = customerResult.success ? customerResult.customers : [];
             const pendingCount = orders.filter(o => o.status === 'pending').length;
+            const processingCount = orders.filter(o => o.status === 'processing').length;
 
             const contentArea = document.getElementById('content-area');
             contentArea.innerHTML = `
-                <div class="page-header"><h1>대시보드</h1></div>
+                <div class="page-header">
+                    <h1>대시보드</h1>
+                </div>
                 <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-label">총 주문</div><div class="stat-number">${orders.length}</div></div>
-                    <div class="stat-card"><div class="stat-label">처리 대기</div><div class="stat-number">${pendingCount}</div></div>
-                    <div class="stat-card"><div class="stat-label">총 고객 수</div><div class="stat-number">${customers.length}</div></div>
+                    <div class="stat-card">
+                        <div class="stat-number">${orders.length}</div>
+                        <div class="stat-label">총 주문</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${pendingCount}</div>
+                        <div class="stat-label">처리 대기</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${processingCount}</div>
+                        <div class="stat-label">제작 중</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${customers.length}</div>
+                        <div class="stat-label">총 고객</div>
+                    </div>
                 </div>
                 <div class="content-card">
                     <h2>최근 주문 (5건)</h2>
-                    <div class="table-responsive">${renderOrderTable(orders.slice(0, 5))}</div>
-                </div>`;
+                    <div class="table-responsive">
+                        ${renderOrderTable(orders.slice(0, 5))}
+                    </div>
+                </div>
+            `;
         }
 
-        async function renderOrdersPage() { /* 이전과 유사, 안정화된 코드 */ }
-        async function renderCustomersPage() { /* 이전과 유사, 안정화된 코드 */ }
-        
-        // --- 테이블 렌더링 헬퍼 ---
+        async function renderOrdersPage() {
+            const result = await apiCall({ action: 'getAllOrders' });
+            const orders = result.success ? result.orders : [];
+
+            const contentArea = document.getElementById('content-area');
+            contentArea.innerHTML = `
+                <div class="page-header">
+                    <h1>주문 관리</h1>
+                </div>
+                <div class="content-card">
+                    <h2>전체 주문 (${orders.length}건)</h2>
+                    <div class="table-responsive">
+                        ${renderOrderTable(orders)}
+                    </div>
+                </div>
+            `;
+        }
+
+        async function renderCustomersPage() {
+            const result = await apiCall({ action: 'getAllCustomers' });
+            const customers = result.success ? result.customers : [];
+
+            const contentArea = document.getElementById('content-area');
+            contentArea.innerHTML = `
+                <div class="page-header">
+                    <h1>고객 관리</h1>
+                </div>
+                <div class="content-card">
+                    <h2>전체 고객 (${customers.length}명)</h2>
+                    <div class="table-responsive">
+                        ${renderCustomerTable(customers)}
+                    </div>
+                </div>
+            `;
+        }
+
         function renderOrderTable(orders) {
-            if (orders.length === 0) return '<p>주문이 없습니다.</p>';
-            let table = `<table><thead><tr><th>주문번호</th><th>고객명</th><th>카드타입</th><th>수량</th><th>상태</th><th>관리</th></tr></thead><tbody>`;
-            orders.forEach(o => {
+            if (orders.length === 0) {
+                return '<p style="text-align: center; padding: 2rem; color: var(--text-secondary);">주문이 없습니다.</p>';
+            }
+
+            const statusText = {
+                'pending': '접수 대기',
+                'processing': '제작 중',
+                'completed': '완료',
+                'cancelled': '취소됨'
+            };
+
+            let table = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>주문번호</th>
+                            <th>고객명</th>
+                            <th>카드타입</th>
+                            <th>수량</th>
+                            <th>상태</th>
+                            <th>주문일</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            orders.forEach(order => {
                 table += `
                     <tr>
-                        <td>${o.id}</td><td>${o.userName || o.userId}</td><td>${o.cardType}</td><td>${o.quantity}</td>
-                        <td><span class="status-badge status-${o.status}">${{pending:'대기',processing:'제작중'}[o.status] || o.status}</span></td>
-                        <td><button class="btn btn-sm btn-primary" onclick="openUpdateModal('${o.id}', '${o.status}')">수정</button></td>
-                    </tr>`;
+                        <td>${order.id}</td>
+                        <td>${order.userName}</td>
+                        <td>${order.cardType}</td>
+                        <td>${order.quantity}개</td>
+                        <td><span class="status-badge status-${order.status}">${statusText[order.status] || order.status}</span></td>
+                        <td>${new Date(order.orderDate).toLocaleDateString()}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="openUpdateModal('${order.id}', '${order.status}')">
+                                상태 변경
+                            </button>
+                        </td>
+                    </tr>
+                `;
             });
+
             table += '</tbody></table>';
             return table;
         }
 
-        // --- 기타 핸들러 및 유틸리티 함수 (이전과 동일) ---
-    </script>
-</body>
-</html>
+        function renderCustom
